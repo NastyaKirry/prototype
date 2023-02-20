@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: camunda
+  name: camunda
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: camunda
+  template:
+    metadata:
+      labels:
+        app: camunda
+    spec:
+      containers:
+      - image: docker26011999/otr-camunda-process
+#      - image: camunda/camunda-bpm-platform
+        imagePullPolicy: Always
+        name: service
+        ports:
+        - containerPort: 8080
+          name: service
+          protocol: TCP
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: camunda
+  labels:
+    app: camunda
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP
+      name: http
+  selector:
+    app: camunda
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: camunda
+  annotations:
+#    nginx.ingress.kubernetes.io/rewrite-target: /$1$2
+  labels:
+    app: camunda
+spec:
+  ingressClassName: "public"
+  rules:
+  - http:
+      paths:
+      - backend:
+          serviceName: camunda
+          servicePort: http
+        path: /camunda
+        pathType: Prefix

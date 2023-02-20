@@ -1,0 +1,148 @@
+image:
+  name: docker:latest
+
+variables:
+# используем рекомендованный docker driver (а это вообще принципиально, интересно?)
+  GIT_STRATEGY: fetch
+  DOCKER_DRIVER: overlay2
+  GIT_SUBMODULE_STRATEGY: recursive
+
+before_script:
+  # print information
+  - docker info
+  - export TERM=xterm-256color
+
+services:
+  - docker:dind
+
+stages:
+  - build
+  - test
+
+build.AutorizeService:
+  stage: build
+  tags:
+    - docker
+  allow_failure: true
+  when: manual
+  script:
+    - echo "${CI_JOB_TOKEN}" | docker login -u gitlab-ci-token --password-stdin "${CI_REGISTRY}"
+    - cd AutorizeService
+    - docker build -t "${CI_REGISTRY_IMAGE}"/autorizeservice:latest .
+    - docker images
+    - docker push "${CI_REGISTRY_IMAGE}"/autorizeservice:latest
+  only:
+    refs:
+      - master
+
+build.ApiGateAwayService:
+  stage: build
+  tags:
+    - docker
+  allow_failure: true
+  when: manual
+  script:
+    - echo "${CI_JOB_TOKEN}" | docker login -u gitlab-ci-token --password-stdin "${CI_REGISTRY}"
+    - cd ApiGateAwayService
+    - docker build -t "${CI_REGISTRY_IMAGE}"/apigateawayservice:latest .
+    - docker images
+    - docker push "${CI_REGISTRY_IMAGE}"/apigateawayservice:latest
+  only:
+    refs:
+      - master
+
+build.EmployeesService:
+  stage: build
+  tags:
+    - docker
+  allow_failure: true
+  when: manual
+  script:
+    - echo "${CI_JOB_TOKEN}" | docker login -u gitlab-ci-token --password-stdin "${CI_REGISTRY}"
+    - cd EmployeesService
+    - docker build -t "${CI_REGISTRY_IMAGE}"/employeesservice:latest .
+    - docker images
+    - docker push "${CI_REGISTRY_IMAGE}"/employeesservice:latest
+  only:
+    refs:
+      - master
+
+build.NotificationServer:
+  stage: build
+  tags:
+    - docker
+  allow_failure: true
+  when: manual
+  script:
+    - echo "${CI_JOB_TOKEN}" | docker login -u gitlab-ci-token --password-stdin "${CI_REGISTRY}"
+    - cd NotificationServer
+    - docker build -t "${CI_REGISTRY_IMAGE}"/notificationserver:latest .
+    - docker images
+    - docker push "${CI_REGISTRY_IMAGE}"/notificationserver:latest
+  only:
+    refs:
+      - master
+
+build.AppealsService:
+  stage: build
+  tags:
+    - docker
+  allow_failure: true
+  when: manual
+  script:
+    - echo "${CI_JOB_TOKEN}" | docker login -u gitlab-ci-token --password-stdin "${CI_REGISTRY}"
+    - cd AppealsService
+    - docker build -t "${CI_REGISTRY_IMAGE}"/appealsservice:latest .
+    - docker images
+    - docker push "${CI_REGISTRY_IMAGE}"/appealsservice:latest
+  only:
+    refs:
+      - master
+  
+build.ClientsService:
+  stage: build
+  tags:
+    - docker
+  allow_failure: true
+  when: manual
+  script:
+    - echo "${CI_JOB_TOKEN}" | docker login -u gitlab-ci-token --password-stdin "${CI_REGISTRY}"
+    - cd ClientsService
+    - docker build -t "${CI_REGISTRY_IMAGE}"/clientsservice:latest .
+    - docker images
+    - docker push "${CI_REGISTRY_IMAGE}"/clientsservice:latest
+  only:
+    refs:
+      - master
+
+build.otr-camunda-process:
+  stage: build
+  tags:
+    - docker
+  allow_failure: true
+  when: manual
+  script:
+    - echo "${CI_JOB_TOKEN}" | docker login -u gitlab-ci-token --password-stdin "${CI_REGISTRY}"
+    - cd otr-camunda-process
+    - docker build -t "${CI_REGISTRY_IMAGE}"/otr-camunda-process:latest .
+    - docker images
+    - docker push "${CI_REGISTRY_IMAGE}"/otr-camunda-process:latest
+  only:
+    refs:
+      - master
+
+build.front:
+  stage: build
+  tags:
+    - docker
+  allow_failure: true
+  when: manual
+  script:
+    - echo "${CI_JOB_TOKEN}" | docker login -u gitlab-ci-token --password-stdin "${CI_REGISTRY}"
+    - cd firma-react-master
+    - docker build -t "${CI_REGISTRY_IMAGE}"/front:latest .
+    - docker images
+    - docker push "${CI_REGISTRY_IMAGE}"/front:latest
+  only:
+    refs:
+      - master

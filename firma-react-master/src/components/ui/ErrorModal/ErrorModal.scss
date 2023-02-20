@@ -1,0 +1,20 @@
+@import '../../../common/styles/variables.scss';
+
+.error-modal {
+    position: fixed;
+    margin: 0 auto;
+    top: calc(50vh - 80px);
+    width: auto;
+    min-height: 160px;
+    padding: 20px;
+    box-sizing: border-box;
+    background: #ffffff;
+    border-radius: 6px;
+    border: 1px solid rgb(204, 61, 61);
+    text-align: center;
+    z-index: 10;
+    
+    p {
+        font-size: 20px;
+    }
+}
