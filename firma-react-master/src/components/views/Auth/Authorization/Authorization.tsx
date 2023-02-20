@@ -67,7 +67,7 @@ const Authorization = () => {
                     <button type="submit" className="common-btn">Вход</button>
                     {
                         location.hash.slice(2,7) !== 'admin' ?
-                            <button type="submit" className="common-btn transparent-btn" onClick={() => history.push('/registration')}>Регистрация</button> :
+                            <button type="submit" className="common-btn transparent-btn" onClick={() => history.push('/registration')}>Регистрация111111111111111111111</button> :
                             null
                     }
                 </div>
